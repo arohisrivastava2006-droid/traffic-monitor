@@ -35,7 +35,17 @@
     <c:choose>
       <c:when test="${empty periods}"><p class="empty">No data yet.</p></c:when>
       <c:otherwise>
-        <div class="chart-box"><canvas id="periodChart"></canvas></div>
+        <c:set var="pm" value="1"/>
+        <c:forEach var="p" items="${periods}"><c:if test="${p.avgVehicles > pm}"><c:set var="pm" value="${p.avgVehicles}"/></c:if></c:forEach>
+        <div class="bars">
+          <c:forEach var="p" items="${periods}">
+            <div class="bar-row">
+              <span class="lbl">${p.period}</span>
+              <div class="bar-track"><div class="bar-fill" style="width:${p.avgVehicles * 100 / pm}%"></div></div>
+              <span class="val">${p.avgVehicles}</span>
+            </div>
+          </c:forEach>
+        </div>
       </c:otherwise>
     </c:choose>
   </div>
@@ -44,7 +54,17 @@
     <c:choose>
       <c:when test="${empty hourly}"><p class="empty">No data yet.</p></c:when>
       <c:otherwise>
-        <div class="chart-box"><canvas id="hourChart"></canvas></div>
+        <c:set var="hm" value="1"/>
+        <c:forEach var="h" items="${hourly}"><c:if test="${h.avgVehicles > hm}"><c:set var="hm" value="${h.avgVehicles}"/></c:if></c:forEach>
+        <div class="bars">
+          <c:forEach var="h" items="${hourly}">
+            <div class="bar-row">
+              <span class="lbl">${h.hr}:00</span>
+              <div class="bar-track"><div class="bar-fill cyan" style="width:${h.avgVehicles * 100 / hm}%"></div></div>
+              <span class="val">${h.avgVehicles}</span>
+            </div>
+          </c:forEach>
+        </div>
       </c:otherwise>
     </c:choose>
   </div>
@@ -84,32 +104,5 @@
     </c:otherwise>
   </c:choose>
 </div>
-
-<script>
-  Chart.defaults.color = '#9aa7bf';
-  Chart.defaults.borderColor = '#243049';
-  const periodEl = document.getElementById('periodChart');
-  if (periodEl) new Chart(periodEl, {
-    type: 'bar',
-    data: {
-      labels: [<c:forEach var="p" items="${periods}" varStatus="s">"${p.period}"${s.last ? '' : ','}</c:forEach>],
-      datasets: [{ label: 'Avg vehicles',
-        data: [<c:forEach var="p" items="${periods}" varStatus="s">${p.avgVehicles}${s.last ? '' : ','}</c:forEach>],
-        backgroundColor: ['#22d3ee', '#f7931e', '#ef4444'] }]
-    },
-    options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
-  });
-  const hourEl = document.getElementById('hourChart');
-  if (hourEl) new Chart(hourEl, {
-    type: 'line',
-    data: {
-      labels: [<c:forEach var="h" items="${hourly}" varStatus="s">"${h.hr}:00"${s.last ? '' : ','}</c:forEach>],
-      datasets: [{ label: 'Avg vehicles',
-        data: [<c:forEach var="h" items="${hourly}" varStatus="s">${h.avgVehicles}${s.last ? '' : ','}</c:forEach>],
-        borderColor: '#f7931e', backgroundColor: 'rgba(247,147,30,.15)', fill: true, tension: .3 }]
-    },
-    options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
-  });
-</script>
 
 <%@ include file="includes/footer.jsp" %>

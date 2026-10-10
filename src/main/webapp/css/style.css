@@ -113,3 +113,18 @@ input:focus, select:focus { outline: 2px solid var(--orange); border-color: tran
 .toolbar { display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; }
 .toolbar .grow { flex: 1; }
 footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 2rem 1rem; }
+
+/* ---- pure CSS bar charts (no JavaScript) ---- */
+.bars { display: grid; gap: .5rem; }
+.bar-row { display: grid; grid-template-columns: 9.5rem 1fr 4.2rem; align-items: center; gap: .6rem; font-size: .85rem; }
+.bar-row .lbl { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-track { background: var(--panel-2); border-radius: 6px; height: 16px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 6px; background: var(--orange); }
+.bar-fill.low { background: var(--green); }
+.bar-fill.moderate { background: var(--yellow); }
+.bar-fill.high { background: var(--orange); }
+.bar-fill.severe { background: var(--red); }
+.bar-fill.cyan { background: var(--cyan); }
+.bar-row .val { text-align: right; }
+.confirm { font-size: .8rem; color: var(--muted); margin-right: .4rem; }
+.confirm input { width: auto; }

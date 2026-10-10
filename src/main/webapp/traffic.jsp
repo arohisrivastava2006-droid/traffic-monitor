@@ -55,9 +55,9 @@
     <button class="btn secondary" type="submit">Generate 30-day history (big data set)</button>
   </form>
   <c:if test="${sessionScope.user.role == 'ADMIN'}">
-    <form class="inline" method="post" action="${pageContext.request.contextPath}/traffic"
-          onsubmit="return confirm('Delete ALL traffic records?')">
+    <form class="inline" method="post" action="${pageContext.request.contextPath}/traffic">
       <input type="hidden" name="action" value="clearAll">
+      <label class="confirm"><input type="checkbox" required> I'm sure</label>
       <button class="btn danger" type="submit">Delete all records</button>
     </form>
   </c:if>
@@ -67,12 +67,13 @@
   <div class="toolbar">
     <h2 class="grow" style="margin:0">Latest 100 records</h2>
     <form method="get" action="${pageContext.request.contextPath}/traffic" class="toolbar" style="margin:0">
-      <select name="junctionId" onchange="this.form.submit()" style="width:auto">
+      <select name="junctionId" style="width:auto">
         <option value="">All junctions</option>
         <c:forEach var="j" items="${junctions}">
           <option value="${j.junctionId}" ${selectedJunction == j.junctionId ? 'selected' : ''}><c:out value="${j.name}"/></option>
         </c:forEach>
       </select>
+      <button class="btn secondary small" type="submit">Filter</button>
     </form>
   </div>
   <c:choose>

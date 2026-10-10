@@ -18,9 +18,9 @@
       <input type="hidden" name="action" value="resolveAll">
       <button class="btn secondary small" type="submit">Resolve all</button></form>
     <c:if test="${sessionScope.user.role == 'ADMIN'}">
-      <form class="inline" method="post" action="${pageContext.request.contextPath}/alerts"
-            onsubmit="return confirm('Delete every alert?')">
+      <form class="inline" method="post" action="${pageContext.request.contextPath}/alerts">
         <input type="hidden" name="action" value="clear">
+        <label class="confirm"><input type="checkbox" required> I'm sure</label>
         <button class="btn danger small" type="submit">Clear all</button></form>
     </c:if>
   </div>

@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${pageTitle} | Urban Traffic Monitoring</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <c:if test="${param.refresh == 'on'}"><meta http-equiv="refresh" content="15"></c:if>
 </head>
 <body>
 <nav class="nav">

@@ -1,0 +1,8 @@
+.root { -fx-base: #111827; -fx-background: #0a1128; -fx-control-inner-background: #111827;
+        -fx-font-family: "System"; -fx-font-size: 13px; }
+.title { -fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #f7931e; }
+.muted { -fx-text-fill: #9aa7bf; }
+.card { -fx-background-color: #172036; -fx-background-radius: 10; -fx-padding: 12; }
+.stat-num { -fx-font-size: 26px; -fx-font-weight: bold; }
+.error { -fx-text-fill: #ef4444; }
+.ok { -fx-text-fill: #22c55e; }

@@ -66,3 +66,21 @@ src/main/webapp/                     JSP pages, includes/, css/
 - Passwords are stored as SHA-256 hashes (MySQL `SHA2`). That is fine for a college project; use BCrypt for anything real.
 - If login shows a "Database error", re-check `db.properties` and that `schema.sql` ran successfully.
 - Using your own Tomcat instead: run `mvn clean package`, then deploy `target/traffic-monitor.war` to **Tomcat 10.1** (not 9, because the code uses `jakarta.*` packages).
+
+## JavaFX desktop dashboard
+A desktop version of the dashboard lives in the `desktop/` folder. It reuses the same model, DAO and
+service classes and the same MySQL database as the website (so run `schema.sql` first and keep MySQL running).
+
+```
+cd desktop
+mvn javafx:run
+```
+
+It has tabs for Dashboard (junction tiles + charts), Traffic Data (add records, generate sample data),
+Alerts, Junctions and Reports (with CSV export). Database work runs on background threads (JavaFX `Task`)
+so the window never freezes. You can stay logged in to the website and the desktop app at the same time.
+
+## No JavaScript
+The website pages use only HTML, CSS and JSP/JSTL. The charts are drawn as CSS bars on the server,
+auto-refresh uses an HTML meta-refresh (`/dashboard?refresh=on`), and delete confirmations use a required
+"I'm sure" checkbox instead of a script.

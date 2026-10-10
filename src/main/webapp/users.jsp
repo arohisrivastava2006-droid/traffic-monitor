@@ -31,8 +31,7 @@
                     <input type="hidden" name="role" value="${u.role == 'ADMIN' ? 'OPERATOR' : 'ADMIN'}">
                     <button class="btn secondary small" type="submit">Make ${u.role == 'ADMIN' ? 'Operator' : 'Admin'}</button>
                   </form>
-                  <form class="inline" method="post" action="${pageContext.request.contextPath}/users"
-                        onsubmit="return confirm('Delete this user?')">
+                  <form class="inline" method="post" action="${pageContext.request.contextPath}/users">
                     <input type="hidden" name="id" value="${u.id}">
                     <input type="hidden" name="action" value="delete">
                     <button class="btn danger small" type="submit">Delete</button>

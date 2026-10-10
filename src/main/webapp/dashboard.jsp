@@ -9,7 +9,10 @@
   <div class="eyebrow">Live overview</div>
   <h1>Traffic Monitoring Dashboard</h1>
   <p>Latest reading from every junction, with congestion level and active alerts.</p>
-  <label style="font-size:.85rem;color:var(--muted)"><input type="checkbox" id="autoRefresh" style="width:auto"> Auto-refresh every 15 seconds</label>
+  <c:choose>
+    <c:when test="${param.refresh == 'on'}"><a class="btn secondary small" href="${pageContext.request.contextPath}/dashboard">Auto-refresh is ON (click to turn off)</a></c:when>
+    <c:otherwise><a class="btn secondary small" href="${pageContext.request.contextPath}/dashboard?refresh=on">Turn on auto-refresh (15 s)</a></c:otherwise>
+  </c:choose>
 </div>
 
 <div class="grid stats">
@@ -51,11 +54,40 @@
 <div class="grid two">
   <div class="card">
     <h2>Density by junction (latest)</h2>
-    <div class="chart-box"><canvas id="densityChart"></canvas></div>
+    <c:choose>
+      <c:when test="${empty junctions}"><p class="empty">No junctions.</p></c:when>
+      <c:otherwise>
+        <div class="bars">
+          <c:forEach var="j" items="${junctions}">
+            <c:set var="d" value="${empty j.latest ? 0 : j.latest.trafficDensity}"/>
+            <div class="bar-row">
+              <span class="lbl" title="<c:out value='${j.name}'/>"><c:out value="${j.name}"/></span>
+              <div class="bar-track"><div class="bar-fill ${empty j.latest ? '' : fn:toLowerCase(j.latest.level)}" style="width:${d}%"></div></div>
+              <span class="val">${d}%</span>
+            </div>
+          </c:forEach>
+        </div>
+      </c:otherwise>
+    </c:choose>
   </div>
   <div class="card">
     <h2>Average vehicles by hour of day</h2>
-    <div class="chart-box"><canvas id="hourlyChart"></canvas></div>
+    <c:choose>
+      <c:when test="${empty hourly}"><p class="empty">No data yet.</p></c:when>
+      <c:otherwise>
+        <c:set var="mx" value="1"/>
+        <c:forEach var="h" items="${hourly}"><c:if test="${h.avgVehicles > mx}"><c:set var="mx" value="${h.avgVehicles}"/></c:if></c:forEach>
+        <div class="bars">
+          <c:forEach var="h" items="${hourly}">
+            <div class="bar-row">
+              <span class="lbl">${h.hr}:00</span>
+              <div class="bar-track"><div class="bar-fill cyan" style="width:${h.avgVehicles * 100 / mx}%"></div></div>
+              <span class="val">${h.avgVehicles}</span>
+            </div>
+          </c:forEach>
+        </div>
+      </c:otherwise>
+    </c:choose>
   </div>
 </div>
 
@@ -80,47 +112,5 @@
     </c:otherwise>
   </c:choose>
 </div>
-
-<script>
-  Chart.defaults.color = '#9aa7bf';
-  Chart.defaults.borderColor = '#243049';
-
-  new Chart(document.getElementById('densityChart'), {
-    type: 'bar',
-    data: {
-      labels: [<c:forEach var="j" items="${junctions}" varStatus="s">"<c:out value='${j.name}'/>"${s.last ? '' : ','}</c:forEach>],
-      datasets: [{
-        label: 'Density %',
-        data: [<c:forEach var="j" items="${junctions}" varStatus="s">${empty j.latest ? 0 : j.latest.trafficDensity}${s.last ? '' : ','}</c:forEach>],
-        backgroundColor: '#f7931e'
-      }]
-    },
-    options: { maintainAspectRatio: false, scales: { y: { min: 0, max: 100 } }, plugins: { legend: { display: false } } }
-  });
-
-  new Chart(document.getElementById('hourlyChart'), {
-    type: 'line',
-    data: {
-      labels: [<c:forEach var="h" items="${hourly}" varStatus="s">"${h.hr}:00"${s.last ? '' : ','}</c:forEach>],
-      datasets: [{
-        label: 'Avg vehicles',
-        data: [<c:forEach var="h" items="${hourly}" varStatus="s">${h.avgVehicles}${s.last ? '' : ','}</c:forEach>],
-        borderColor: '#22d3ee', backgroundColor: 'rgba(34,211,238,.15)', fill: true, tension: .3
-      }]
-    },
-    options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
-  });
-</script>
-
-<script>
-  (function () {
-    const box = document.getElementById('autoRefresh');
-    try { box.checked = localStorage.getItem('autoRefresh') === '1'; } catch (e) {}
-    box.addEventListener('change', function () {
-      try { localStorage.setItem('autoRefresh', box.checked ? '1' : '0'); } catch (e) {}
-    });
-    setInterval(function () { if (box.checked) location.reload(); }, 15000);
-  })();
-</script>
 
 <%@ include file="includes/footer.jsp" %>

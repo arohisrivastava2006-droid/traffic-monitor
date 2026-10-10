@@ -53,8 +53,7 @@
                 <td style="white-space:nowrap">
                   <input form="f${j.junctionId}" type="hidden" name="id" value="${j.junctionId}">
                   <button form="f${j.junctionId}" class="btn small" name="action" value="update" type="submit">Save</button>
-                  <button form="f${j.junctionId}" class="btn danger small" name="action" value="delete" type="submit"
-                          onclick="return confirm('Delete this junction and all its traffic records and alerts?')">Delete</button>
+                  <button form="f${j.junctionId}" class="btn danger small" name="action" value="delete" type="submit">Delete</button>
                 </td>
               </c:when>
               <c:otherwise>
