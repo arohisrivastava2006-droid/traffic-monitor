@@ -119,7 +119,7 @@ public class TrafficDataDAO {
         return queryMaps("SELECT DATE_FORMAT(DATE(timestamp), '%d %b %Y') AS day, "
                 + "SUM(vehicle_count) AS totalVehicles, ROUND(AVG(density),1) AS avgDensity, "
                 + "ROUND(AVG(average_speed),1) AS avgSpeed, COUNT(*) AS records "
-                + "FROM traffic_data GROUP BY DATE(timestamp) ORDER BY DATE(timestamp) DESC LIMIT 14");
+                + "FROM traffic_data GROUP BY DATE(timestamp), DATE_FORMAT(DATE(timestamp), '%d %b %Y') ORDER BY DATE(timestamp) DESC LIMIT 14");
     }
 
     public Map<String, Object> keyIndicators() throws SQLException {
